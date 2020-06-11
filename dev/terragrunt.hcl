@@ -23,6 +23,7 @@ generate "provider" {
   if_exists = "overwrite_terragrunt"
   contents  = <<EOF
 provider "aws" {
+  region = "${local.region}"
   assume_role {
     role_arn = "arn:aws:iam::657426360076:user/terragrunt"
   }
