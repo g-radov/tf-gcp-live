@@ -15,7 +15,7 @@ include {
 }
 
 terraform {
-  source = "git@github.com:g-radov/tf-infra-modules.git//eks-luminor"
+  source = "../../../../infrastructure-modules//networking/vpc"
 }
 
 inputs = {
