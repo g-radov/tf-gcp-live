@@ -1,6 +1,6 @@
 locals {
-  env    = read_terragrunt_config(find_in_parent_folders("env.hcl"))
-  region = local.env.locals.defaults.region
+  env_vars    = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  region      = local.env_vars.locals.defaults.region
 }
 
 remote_state {
