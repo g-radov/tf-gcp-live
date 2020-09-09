@@ -1,3 +1,5 @@
+# Define base variables
+# that will be used as inputs for infrastructure modules
 locals {
   env_vars     = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   environment  = local.env_vars.locals.defaults.environment
@@ -11,14 +13,21 @@ locals {
   )
 }
 
+# terragrunt-specific function
+# https://terragrunt.gruntwork.io/docs/reference/built-in-functions/#find_in_parent_folders
 include {
   path = find_in_parent_folders()
 }
 
+# Sourcing hello-world module
 terraform {
   source = "../../../../infrastructure-modules//services/hello-world"
 }
 
+# Define module dependencies
+# Dependency module outputs will be used for
+# current module inputs
+# https://terragrunt.gruntwork.io/docs/getting-started/configuration/
 dependency "ecs" {
   config_path = "../../platforms/ecs-cluster-00"
 }
@@ -27,6 +36,7 @@ dependency "vpc" {
   config_path = "../../networking/vpc"
 }
 
+# hello-wolrd infrastructure module inputs
 inputs = {
   region           = local.region
   name             = local.project_tags.Name
@@ -39,7 +49,7 @@ inputs = {
   vpc_id           = dependency.vpc.outputs.vpc_id
   subnets          = dependency.vpc.outputs.private_subnets
   container_image  = "nginx:stable-alpine"
-  container_name   = "printful-hello-world"
+  container_name   = local.project_tags.Name
   container_port   = 80
   tags             = local.tags
 }

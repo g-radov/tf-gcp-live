@@ -1,3 +1,5 @@
+# Define base variables
+# that will be used as inputs for infrastructure modules
 locals {
   env_vars     = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   environment  = local.env_vars.locals.defaults.environment
@@ -10,14 +12,18 @@ locals {
   )
 }
 
+# terragrunt-specific function
+# https://terragrunt.gruntwork.io/docs/reference/built-in-functions/#find_in_parent_folders
 include {
   path = find_in_parent_folders()
 }
 
+# Sourcing vpc infrastructure module
 terraform {
   source = "../../../../infrastructure-modules//networking/vpc"
 }
 
+# vpc infrastructure module inputs
 inputs = {
   name = local.project_tags.Name
   cidr = "10.0.0.0/16"
