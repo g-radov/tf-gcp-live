@@ -16,7 +16,7 @@ include {
 }
 
 terraform {
-  source = "../../../../infrastructure-modules//services/printful-hello-world"
+  source = "../../../../infrastructure-modules//services/hello-world"
 }
 
 dependency "ecs" {
