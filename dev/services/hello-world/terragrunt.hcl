@@ -3,7 +3,7 @@ locals {
   environment  = local.env_vars.locals.defaults.environment
   region       = local.env_vars.locals.defaults.region
   project_tags = {
-    Name = "printful-hello-world"
+    Name = "hello-world"
   }
   tags = merge(
     local.env_vars.locals.defaults.tags,
