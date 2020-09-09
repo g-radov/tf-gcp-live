@@ -1,6 +1,7 @@
 locals {
   env_vars    = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   region      = local.env_vars.locals.defaults.region
+  account_id  = local.env_vars.locals.defaults.account_id
 }
 
 remote_state {
@@ -25,7 +26,7 @@ generate "provider" {
 provider "aws" {
   region = "${local.region}"
   assume_role {
-    role_arn = "arn:aws:iam::aws_account_number:role/terraform"
+    role_arn = "arn:aws:iam::${local.account_id}":role/terraform"
   }
 }
 EOF
