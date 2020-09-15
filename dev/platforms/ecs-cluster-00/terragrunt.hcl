@@ -26,7 +26,7 @@ terraform {
 # Define module dependencies
 # Dependency module outputs will be used for
 # current module inputs
-# https://terragrunt.gruntwork.io/docs/getting-started/configuration/
+# https://terragrunt.gruntwork.io/docs/reference/config-blocks-and-attributes/#dependency
 dependency "vpc" {
   config_path = "../../networking/vpc"
 }
