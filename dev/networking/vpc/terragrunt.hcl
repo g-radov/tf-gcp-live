@@ -19,7 +19,7 @@ include {
   path = find_in_parent_folders()
 }
 
-# Sourcing 'vpc' infrastructure module
+# Source 'vpc' infrastructure module
 terraform {
   source = "../../../../tf-infrastructure-modules//gcp/networking/vpc"
 }
