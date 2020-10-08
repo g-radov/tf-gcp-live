@@ -1,11 +1,11 @@
 # Define base variables
-# that will be used as inputs for infrastructure modules
+# that will be used as inputs for infrastructure module
 locals {
-  env_vars     = read_terragrunt_config(find_in_parent_folders("env.hcl"))
-  environment  = local.env_vars.locals.defaults.environment
-  region       = local.env_vars.locals.defaults.region
+  env_vars    = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  environment = local.env_vars.locals.defaults.environment
+  region      = local.env_vars.locals.defaults.region
   project_tags = {
-    Name = "hello-world"
+    Name = "gke00-${local.environment}"
   }
   tags = merge(
     local.env_vars.locals.defaults.tags,
@@ -19,37 +19,25 @@ include {
   path = find_in_parent_folders()
 }
 
-# Sourcing hello-world module
+# Source 'hello-world' infrastructure module
 terraform {
-  source = "../../../../infrastructure-modules//services/hello-world"
-}
-
-# Define module dependencies
-# Dependency module outputs will be used for
-# current module inputs
-# https://terragrunt.gruntwork.io/docs/reference/config-blocks-and-attributes/#dependency
-dependency "ecs" {
-  config_path = "../../platforms/ecs-cluster-00"
+  source = "../../../../tf-infrastructure-modules//gcp/services/hello-world"
 }
 
 dependency "vpc" {
   config_path = "../../networking/vpc"
 }
 
-# hello-wolrd infrastructure module inputs
+# 'hello-world' infrastructure module inputs
 inputs = {
-  region           = local.region
-  name             = local.project_tags.Name
-  family           = local.project_tags.Name
-  cluster          = dependency.ecs.outputs.ecs_cluster_arn
-  target_group_arn = dependency.ecs.outputs.target_group_arns.0
-  security_groups  = [
-    dependency.ecs.outputs.alb_sg_client_id
+  project_id        = "example-project"
+  name              = local.project_tags.Name
+  region            = local.region
+  network           = dependency.vpc.outputs.network_name
+  subnetwork        = dependency.vpc.outputs.subnets_names.0
+  ip_range_pods     = dependency.vpc.outputs.subnets_secondary_ranges[0][0].range_name
+  ip_range_services = dependency.vpc.outputs.subnets_secondary_ranges[0][0].range_name
+  zones = [
+    "${local.region}-b",
   ]
-  vpc_id           = dependency.vpc.outputs.vpc_id
-  subnets          = dependency.vpc.outputs.private_subnets
-  container_image  = "nginx:stable-alpine"
-  container_name   = local.project_tags.Name
-  container_port   = 80
-  tags             = local.tags
 }
