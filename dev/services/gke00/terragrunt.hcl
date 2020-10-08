@@ -21,14 +21,14 @@ include {
 
 # Source 'hello-world' infrastructure module
 terraform {
-  source = "../../../../tf-infrastructure-modules//gcp/services/hello-world"
+  source = "../../../../tf-infrastructure-modules//gcp/services/gke"
 }
 
 dependency "vpc" {
   config_path = "../../networking/vpc"
 }
 
-# 'hello-world' infrastructure module inputs
+# 'gke' infrastructure module inputs
 inputs = {
   project_id        = "example-project"
   name              = local.project_tags.Name
