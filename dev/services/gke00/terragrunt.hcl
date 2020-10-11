@@ -26,7 +26,7 @@ terraform {
 
 # Define modules dependencies
 # https://terragrunt.gruntwork.io/docs/reference/config-blocks-and-attributes/#dependencies
-dependencies = {
+dependencies {
   paths = [
     "../../networking/vpc"
   ]
