@@ -40,7 +40,7 @@ dependency "vpc" {
 
 # 'gke' infrastructure module inputs
 inputs = {
-  project_id        = "invalidbydefault.xyz"
+  project_id        = "invalidbydefault-xyz"
   name              = local.project_tags.Name
   region            = local.region
   network           = dependency.vpc.outputs.network_name
