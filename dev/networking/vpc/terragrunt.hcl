@@ -27,7 +27,7 @@ terraform {
 # 'vpc' infrastructure module inputs
 inputs = {
   region       = local.region
-  project_id   = "example-project"
+  project_id   = "invalidbydefault-xyz"
   network_name = local.project_tags.Name
   routing_mode = "GLOBAL"
   subnet_ip = [

@@ -1,5 +1,5 @@
 # Define base variables
-# that will be used as inputs for infrastructure module
+# that will be used as inputs for infrastructure modules.
 locals {
   env_vars    = read_terragrunt_config(find_in_parent_folders("env.hcl"))
   environment = local.env_vars.locals.defaults.environment
@@ -19,18 +19,28 @@ include {
   path = find_in_parent_folders()
 }
 
-# Source 'hello-world' infrastructure module
+# Source 'gke' infrastructure module
 terraform {
   source = "../../../../tf-infrastructure-modules//gcp/services/gke"
 }
 
+# Define modules dependencies
+# https://terragrunt.gruntwork.io/docs/reference/config-blocks-and-attributes/#dependencies
+dependencies = {
+  paths = [
+    "../../networking/vpc"
+  ]
+}
+
+# Use 'vpc' module as a dependency
+# https://terragrunt.gruntwork.io/docs/reference/config-blocks-and-attributes/#dependency
 dependency "vpc" {
   config_path = "../../networking/vpc"
 }
 
 # 'gke' infrastructure module inputs
 inputs = {
-  project_id        = "example-project"
+  project_id        = "invalidbydefault.xyz"
   name              = local.project_tags.Name
   region            = local.region
   network           = dependency.vpc.outputs.network_name
